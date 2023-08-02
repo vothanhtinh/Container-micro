@@ -14,9 +14,9 @@ import {
   setNewImage,
 } from "./store/slice/containerReducer";
 
-function App() {
-  const RelatedProduct = lazy(() => import("./components/relatedProduct"));
+const RelatedProducts = React.lazy(() => import("Products/App"));
 
+function App() {
   const dispatch = useAppDispatch();
 
   const products = useSelector(selectContainers);
@@ -34,15 +34,18 @@ function App() {
   useEffect(() => {
     // Hàm xử lý sự kiện nhận thông điệp từ iframe
     const handleMessage = (event: any) => {
+      console.log(event);
       // Kiểm tra origin của frame để đảm bảo rằng thông điệp chỉ đến từ đúng nguồn
-      if (event.origin === "http://localhost:3001") {
-        // Nhận thông điệp từ iframe
-        const { type, payload } = event.data;
+      // if (event.origin === "http://localhost:3001") {
+      // console.log(event, "test");
 
-        if (type === "CHANGE_IMAGE") {
-          dispatch(setNewImage({ ...payload }));
-        }
+      // Nhận thông điệp từ iframe
+      const { type, payload } = event.data;
+
+      if (type === "CHANGE_IMAGE") {
+        dispatch(setNewImage({ ...payload }));
       }
+      // }
     };
 
     window.addEventListener("message", handleMessage);
@@ -78,7 +81,7 @@ function App() {
             <div className="w-1/2 pt-10">
               <label className="text-lg font-medium">{product.title}</label>
               <ul className="flex flex-row">
-                {products.map((product) => (
+                {products?.map((product: any) => (
                   <li
                     onClick={() => onClickChangeProduct(product)}
                     key={product.id}
@@ -98,7 +101,7 @@ function App() {
           </div>
         </div>
         <div className="p-1" style={{ width: 210 }}>
-          <iframe className="w-full h-full" src="http://localhost:3001/" />
+          <RelatedProducts />
         </div>
       </div>
     </React.Suspense>
