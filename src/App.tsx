@@ -15,8 +15,6 @@ import {
 } from "./store/slice/containerReducer";
 
 function App() {
-  const RelatedProduct = lazy(() => import("./components/relatedProduct"));
-
   const dispatch = useAppDispatch();
 
   const products = useSelector(selectContainers);
@@ -34,6 +32,7 @@ function App() {
   useEffect(() => {
     // Hàm xử lý sự kiện nhận thông điệp từ iframe
     const handleMessage = (event: any) => {
+      console.log({ event });
       // Kiểm tra origin của frame để đảm bảo rằng thông điệp chỉ đến từ đúng nguồn
       if (event.origin === "http://localhost:3001") {
         // Nhận thông điệp từ iframe
